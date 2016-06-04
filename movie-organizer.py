@@ -84,6 +84,8 @@ def process_file(video_path):
         print('Moving video: ' + title + ext)
         shutil.move(video_path, os.path.join(folder, title + ext))
 
+    return True
+
 opensubtitles = OpenSubtitles()
 
 token = opensubtitles.login('marxin', 'spartapraha')
