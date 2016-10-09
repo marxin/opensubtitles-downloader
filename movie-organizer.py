@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description='Video organizer')
 parser.add_argument('folder', help='Folder with videos')
 parser.add_argument('destination', help='Folder with videos')
 parser.add_argument('--move', dest = 'move', help='Move video files', action = 'store_true')
+parser.add_argument('--language', help='Language of subtitles', default = 'cze')
 args = parser.parse_args()
 
 def is_video_ext(ext):
@@ -33,13 +34,13 @@ def process_file(video_path):
     f = File(video_path)
     ext = os.path.splitext(video_path)[1]
 
-    data = opensubtitles.search_subtitles([{'sublanguageid': 'cze', 'moviehash': f.get_hash(), 'moviebytesize': f.size}])
+    data = opensubtitles.search_subtitles([{'sublanguageid': args.language, 'moviehash': f.get_hash(), 'moviebytesize': f.size}])
 
     if len(data) == 0:
         print('No subtitles found')
         return False
 
-    print('Found %d CZE subtitles' % len(data))
+    print('Found %d %s subtitles' % (len(data), args.language))
 
     subtitle = data[0]
     url = subtitle['ZipDownloadLink']    
