@@ -2,6 +2,7 @@
 
 from pythonopensubtitles.opensubtitles import OpenSubtitles
 from pythonopensubtitles.utils import File
+from pythonopensubtitles.settings import Settings
 
 import sys
 import json
@@ -42,8 +43,15 @@ def process_file(video_path):
 
     print('Found %d %s subtitles' % (len(data), args.language))
 
-    subtitle = data[0]
-    url = subtitle['ZipDownloadLink']    
+    max_download_count = -1
+    subtitle = None
+    for s in data:
+        d = int(s['SubDownloadsCnt'])
+        if d > max_download_count:
+            max_download_count = d
+            subtitle = s
+
+    url = subtitle['ZipDownloadLink']
     encoding = subtitle['SubEncoding']
     imdb_id = 'tt' + subtitle['IDMovieImdb'].rjust(7, '0')
     imdb_info = get_imdb_info (imdb_id)
@@ -87,10 +95,13 @@ def process_file(video_path):
 
     return True
 
+Settings.USER_AGENT = 'OSTestUserAgentTemp'
 opensubtitles = OpenSubtitles()
 
 token = opensubtitles.login('marxin', 'spartapraha')
-assert type(token) == str
+if not type(token) == str:
+    print("Can't login to opensubtitles.org")
+    exit(1)
 
 file_list = []
 
