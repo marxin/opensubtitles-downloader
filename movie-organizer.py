@@ -41,7 +41,7 @@ def process_file(video_path):
         print('No subtitles found')
         return False
 
-    print('Found %d %s subtitles' % (len(data), args.language))
+    print('Found %d %s subtitles' % (len(data), args.language), end = '')
 
     max_download_count = -1
     subtitle = None
@@ -50,6 +50,8 @@ def process_file(video_path):
         if d > max_download_count:
             max_download_count = d
             subtitle = s
+
+    print(' with %d downloads' % max_download_count)
 
     url = subtitle['ZipDownloadLink']
     encoding = subtitle['SubEncoding']
