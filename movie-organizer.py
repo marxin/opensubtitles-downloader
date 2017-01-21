@@ -95,7 +95,7 @@ def process_file(video_path):
         destination = os.path.join(folder, title + ext)
         if os.path.abspath(video_path) != os.path.abspath(destination):
             print('Moving video: ' + title + ext)
-            shutil.move(video_path, )
+            shutil.move(video_path, destination)
         else:
             print('Not moving: same location')
 
