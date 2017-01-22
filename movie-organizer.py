@@ -35,7 +35,13 @@ def process_file(video_path):
     f = File(video_path)
     ext = os.path.splitext(video_path)[1]
 
-    data = opensubtitles.search_subtitles([{'sublanguageid': args.language, 'moviehash': f.get_hash(), 'moviebytesize': f.size}])
+    for i in range(5):
+        try:
+            data = opensubtitles.search_subtitles([{'sublanguageid': args.language, 'moviehash': f.get_hash(), 'moviebytesize': f.size}])
+            break
+        except ProtocolError as e:
+            print('Retrying...')
+            sleep(5)
 
     if len(data) == 0:
         print('No subtitles found')
